@@ -1,11 +1,11 @@
-#FMS-Parsers
+# FMS-Parsers
 
-##Техническое задание
+## Техническое задание
 https://docs.google.com/document/d/1gwk3Ic6_WK7gwqLGy7QGbXRtWdqdipdcJ3wJNceZT-M/edit
 
-##Список используемых технологий
+## Список используемых технологий
 
-###Backend
+### Backend
 * OpenJDK 8
 * Spring Boot
 * Spring Mvc
@@ -24,32 +24,32 @@ https://docs.google.com/document/d/1gwk3Ic6_WK7gwqLGy7QGbXRtWdqdipdcJ3wJNceZT-M/
 * Bootstrap
 * jQuery
 
-###Containers
+### Containers
 * Docker
 * Docker Compose 
 
-##Команды для деплоя, локального запуска и тестирования
+## Команды для деплоя, локального запуска и тестирования
 
-###Docker Compose (from bash for Windows NT)
+### Docker Compose (from bash for Windows NT)
 `docker compose up -f docker/docker-compose.yml -d`
 
-###Maven
-####Запустить тесты
+### Maven
+#### Запустить тесты
 `mvn clean verify`
 
-####Быстрый запуск при насторенном подключении к БД
+#### Быстрый запуск при насторенном подключении к БД
 `mvn spring-boot:run`
 
-##Ссылки
+## Ссылки
 
-###Паенль управления
+### Паенль управления
 http://localhost:8080/api/index.html
 
-###Swagger UI
+### Swagger UI
 http://localhost:8080/api/swagger-ui/index.html
 
-##Дополнительные инструкции
+## Дополнительные инструкции
 
-###Ссылка на гайд по установке Docker и Docker Compose для популярных ОС
+### Ссылка на гайд по установке Docker и Docker Compose для популярных ОС
 https://docs.docker.com/engine/install/
 
