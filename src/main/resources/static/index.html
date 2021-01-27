@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <html lang="ru">
+    <meta charset="UTF-8">
+    <title>Панель управления fms-parser</title>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    </head>
+    </body>
+    </br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div align="center" class="col-sm-8 jumbotron">
+            <b>
+                <h1>Добро пожаловать в панель fms-parser!</h1>
+            </b>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-4">
+            <h2>Реестр ФМС</h2>
+            <button class="btn btn-success btn-lg" onclick="FmsRestGetEntity()" type="button">
+                Получить информацию об одном подразделении ФМС
+            </button>
+            </br></br>
+            <button class="btn btn-success btn-lg" onclick="FmsRestGetAll()" type="button">
+                Получить список всех подразделений ФМC
+            </button>
+        </div>
+        <div class="col-sm-4">
+            <h2>Особые операции</h2>
+            <button class="btn btn-warning btn-lg" onclick="JobRestDownloadZip()" type="button">Загрузить данные о
+                подразделениях ФМС с сервера и сохранить в БД
+            </button>
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div align="center" class="col-sm-10" id="result">
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    </div>
+    <script
+            crossorigin="anonymous"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!--    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
+    <script crossorigin="anonymous"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+
+        const FmsRestGetEntity = function () {
+            const ID = prompt("Введите ID подразделения", 1);
+            $.ajax({
+                type: 'GET',
+                url: '/api/fms/' + ID,
+                dataType: 'json',
+                async: true,
+                cache: false,
+                success: function (result) {
+                    $("#result").html(
+                        "<table class=\"table table-striped table-dark\">" +
+                        "        <thead>\n" +
+                        "        <tr>\n" +
+                        "            <th scope=\"col\">Версия</th>\n" +
+                        "            <th scope=\"col\">Имя</th>\n" +
+                        "        </tr>\n" +
+                        "        </thead>\n" +
+                        "        <tbody>\n" +
+                        "        <tr>\n" +
+                        "            <td>" + result.version + "</td>\n" +
+                        "            <td>" + result.name + "</td>\n" +
+                        "        </tr>\n" +
+                        "        </tbody>" +
+                        "</table>"
+                    );
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#result").html(
+                        "<div class=\"alert alert-danger\" role=\"alert\" align=\"left\">\n" +
+                        "                <h4>Не удалось загрузить данные</h4>\n" +
+                        "                <hr>\n" +
+                        "                Код ошибки -\n" + jqXHR.status +
+                        "                <br>\n" +
+                        "                Описание -\n" + jqXHR.responseText +
+                        "            </div>"
+                    );
+                }
+            });
+        };
+
+        const FmsRestGetAll = function () {
+            $.ajax({
+                type: 'GET',
+                url: '/api/fms/',
+                dataType: 'json',
+                async: true,
+                cache: false,
+                success: function (result) {
+                    let listEntity = "";
+
+                    function makeList() {
+                        for (let i = 0; i < result.content.length; i++) {
+                            listEntity += "<tr>\n" + "<td>" + result.content[i].version + "</td>\n" +
+                                "<td>" + result.content[i].name + "</td>\n" +
+                                "</tr>\n"
+                        }
+                    }
+
+                    makeList();
+
+                    $("#result").html(
+                        "<table class=\"table table-striped table-dark\">" +
+                        "        <thead>\n" +
+                        "        <tr>\n" +
+                        "            <th scope=\"col\">Версия</th>\n" +
+                        "            <th scope=\"col\">Имя</th>\n" +
+                        "        </tr>\n" +
+                        "        </thead>\n" +
+                        "        <tbody>\n" +
+                        listEntity +
+                        "        </tbody>" +
+                        "</table>"
+                    );
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#result").html(
+                        "<div class=\"alert alert-danger\" role=\"alert\" align=\"left\">\n" +
+                        "                <h4>Не удалось загрузить данные</h4>\n" +
+                        "                <hr>\n" +
+                        "                Код ошибки -\n" + jqXHR.status +
+                        "                <br>\n" +
+                        "                Описание -\n" + jqXHR.responseText +
+                        "            </div>"
+                    );
+                }
+            });
+        };
+
+        const JobRestDownloadZip = function () {
+            $.ajax({
+                type: 'POST',
+                url: '/api/job/downloadFmsZip/',
+                async: true,
+                success: function (jqXHR) {
+
+                    $("#result").html(
+                        "<div class=\"alert alert-success\" role=\"alert\" align=\"left\">\n" +
+                        "                <h4>Успешно выполнен запрос к серверу на загрузку данных</h4>\n" +
+                        "                <hr>\n" +
+                        jqXHR +
+                        "            </div>"
+                    );
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#result").html(
+                        "<div class=\"alert alert-danger\" role=\"alert\" align=\"left\">\n" +
+                        "                <h4>Что-то пошло не так</h4>\n" +
+                        "                <hr>\n" +
+                        "                Код ошибки -\n" + jqXHR.status +
+                        "                <br>\n" +
+                        "                Описание -\n" + jqXHR.responseText +
+                        "            </div>"
+                    );
+                }
+            });
+        };
+
+    </script>
+    </body>
+    </html>

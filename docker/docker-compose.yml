@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+
+  postgres:
+    image: library/postgres:12.3-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  fms-parser:
+    depends_on:
+      - postgres
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: "${IMAGE_NAME:-fms-parser}:${IMAGE_VERSION:-latest}"
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+
+volumes:
+  db-data:
